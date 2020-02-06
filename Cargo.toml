@@ -5,6 +5,7 @@ authors = ["Joseph"]
 edition = "2018"
 
 [dependencies]
+shadow-clone = "0.1"
 [dependencies.gtk]
 version = "0.6.0"
 features = ["v3_16"]

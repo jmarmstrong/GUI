@@ -1,6 +1,8 @@
 use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Button, Window};
 const GLADE_UI: &str = include_str!("../main.glade");
+use shadow_clone::shadow_clone;
+
 
 fn main() {
     if gtk::init().is_err() {
@@ -11,12 +13,12 @@ fn main() {
     let button: Button = builder.get_object("button").unwrap();
     let buttona: Button = builder.get_object("press").unwrap();
     let windowa: Window = builder.get_object("info1").unwrap();
-    let toggle: Button = builder.get_object("togglea").unwrap();
-    let toggleb: Button = builder.get_object("toggleb").unwrap();
+    let toggle: Button = builder.get_object("buttonb").unwrap();
+    let toggleb: Button = builder.get_object("buttonc").unwrap();
     let windowb: Window = builder.get_object("info2").expect("it faild here");
 
     {
-        let windowa = windowa.clone();
+        shadow_clone!(windowa,windowb);
         toggle.connect_clicked(move |_| {
             windowb.show_all();
             windowa.hide();
@@ -34,9 +36,12 @@ fn main() {
     });
 
     {
-        let windowb = windowb.clone();
-        toggleb.connect_clicked(move |_| windowb.clone().show_all());
-    }    
+      let windowb = windowb.clone();
+       toggleb.connect_clicked(move |_| {
+           windowa.show_all();
+           windowb.hide();
+       });
+    }
 
     windowb.connect_delete_event(|w, _| {
         w.hide();
